@@ -120,7 +120,7 @@ export const LoginForm = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            className={`w-full bg-[#0093DF] text-white cursor-pointer py-2 px-4 rounded-md hover:bg-[#007AC0] focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
               isLoading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >

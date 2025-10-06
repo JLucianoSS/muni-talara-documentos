@@ -1,3 +1,6 @@
+
+import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -12,8 +15,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <div>
-      { children }
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <Header/>
+        <div className="flex flex-1">
+          <Sidebar />
+          <main className="flex-1 p-6 bg-muni-white">
+            {children}
+          </main>
+        </div>
     </div>
   );
 }
