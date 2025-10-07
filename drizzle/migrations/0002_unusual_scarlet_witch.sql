@@ -1,0 +1,1 @@
+ALTER TABLE "documents" ADD COLUMN "name" varchar(200) NOT NULL;

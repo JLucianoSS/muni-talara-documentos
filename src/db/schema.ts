@@ -36,6 +36,7 @@ export const expedientes = pgTable('expedientes', {
 export const documents = pgTable('documents', {
   id: serial('id').primaryKey(),
   expedienteId: serial('expediente_id').notNull().references(() => expedientes.id),
+  name: varchar('name', { length: 200 }).notNull(), // Nombre del documento para identificarlo
   type: typeEnum('type').notNull(),
   date: timestamp('date').notNull(),
   responsibleUserId: serial('responsible_user_id').notNull().references(() => users.id),
