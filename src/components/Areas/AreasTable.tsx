@@ -20,7 +20,8 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
     setLoading(true);
     try {
       const data = await fetchAreasWithExpedientesClient();
-      setAreas(data);
+      const sortedData = [...data].sort((a, b) => b.id - a.id);
+      setAreas(sortedData);
     } catch {
       setMessage('Error cargando áreas');
     } finally {

@@ -40,7 +40,8 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
     setLoading(true);
     try {
       const data = await fetchDocumentsClient();
-      setDocuments(data);
+      const sortedData = [...data].sort((a, b) => b.id - a.id);
+      setDocuments(sortedData);
     } catch {
       setMessage('Error cargando documentos');
     } finally {
@@ -118,7 +119,7 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
             defaultValues={{
               expedienteId: editDoc.expedienteId,
               name: editDoc.name,
-              date: editDoc.date.slice(0, 10),
+              date: new Date(editDoc.date).toISOString().slice(0, 16),
               filePath: editDoc.filePath,
             }}
             onClose={() => setEditDoc(null)}
@@ -159,7 +160,17 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
                 <tr key={d.id} className="hover:bg-gray-50">
                   <td className="p-3">{d.expedienteNumber}</td>
                   <td className="p-3">{d.name}</td>
-                  <td className="p-3">{new Date(d.date).toLocaleDateString()}</td>
+                  <td className="p-3">
+                    <div>
+                      {new Date(d.date).toLocaleDateString()}
+                      <div className="text-xs text-gray-500">
+                        {new Date(d.date).toLocaleTimeString('es-ES', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </div>
+                    </div>
+                  </td>
                   <td className="p-3">{d.areaName}</td>
                   <td className="p-3">{d.responsibleUsername}</td>
                   <td className="p-3">

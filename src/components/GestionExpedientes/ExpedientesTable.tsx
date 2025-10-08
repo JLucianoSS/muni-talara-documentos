@@ -55,7 +55,10 @@ export const ExpedientesTable = ({ expedientes: initialExpedientes, areas, users
     setLoading(true);
     try {
       const data = await fetchExpedientesWithDocumentsClient();
-      setExpedientes(data);
+      const sortedData = [...data].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setExpedientes(sortedData);
     } catch (e) {
       console.error(e);
       setMessage('Error cargando expedientes');
@@ -230,8 +233,28 @@ export const ExpedientesTable = ({ expedientes: initialExpedientes, areas, users
                   </td>
                   <td className="p-3">{exp.responsibleUsername}</td>
                   <td className="p-3">{exp.areaName}</td>
-                  <td className="p-3">{new Date(exp.createdAt).toLocaleDateString()}</td>
-                  <td className="p-3">{new Date(exp.updatedAt).toLocaleDateString()}</td>
+                  <td className="p-3">
+                    <div>
+                      {new Date(exp.createdAt).toLocaleDateString()}
+                      <div className="text-xs text-gray-500">
+                        {new Date(exp.createdAt).toLocaleTimeString('es-ES', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="p-3">
+                    <div>
+                      {new Date(exp.updatedAt).toLocaleDateString()}
+                      <div className="text-xs text-gray-500">
+                        {new Date(exp.updatedAt).toLocaleTimeString('es-ES', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </div>
+                    </div>
+                  </td>
                   <td className="p-3">
                     <div className="flex items-center space-x-2">
                       <button

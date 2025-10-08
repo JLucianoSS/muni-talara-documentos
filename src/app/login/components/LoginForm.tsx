@@ -20,6 +20,7 @@ export const LoginForm = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const {
     register,
@@ -31,6 +32,7 @@ export const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
+    setLoginError(null); // Limpiar errores anteriores
     try {
       const response = await fetch('/api/auth', {
         method: 'POST',
@@ -50,9 +52,7 @@ export const LoginForm = () => {
       console.error(err);
       // Mostrar el error como un mensaje en el formulario
       const errorMessage = err instanceof Error ? err.message : 'Error al conectar con el servidor';
-      // No usamos setError de useState, usamos setError de react-hook-form
-      // para asociar el error general al formulario
-      // Nota: react-hook-form no tiene un setError global directamente, así que usamos un div
+      setLoginError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -114,8 +114,10 @@ export const LoginForm = () => {
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
           </div>
-          {errors.root && (
-            <p className="text-red-500 text-sm">{errors.root.message}</p>
+          {loginError && (
+            <div className="bg-red-50 border border-red-200 rounded-md p-3">
+              <p className="text-red-600 text-sm">{loginError}</p>
+            </div>
           )}
           <button
             type="submit"

@@ -29,6 +29,26 @@ type Props = {
   initialFilters: SearchFilters;
 };
 
+// Función para formatear la descripción del expediente con el estado en negrita
+const formatExpedienteDescription = (description: string, state?: string) => {
+  if (!state || !description.includes('Expediente')) {
+    return description;
+  }
+  
+  const stateInfo = getExpedienteStateInfo(state as any);
+  const parts = description.split(' - ');
+  if (parts.length >= 2) {
+    const expedientePart = parts[0]; // "Expediente En trámite"
+    const areaPart = parts.slice(1).join(' - '); // "Secretaria"
+    
+    // Extraer el estado de la parte del expediente
+    const expedienteText = expedientePart.replace(stateInfo.label, '');
+    return `${expedienteText}<strong>${stateInfo.label}</strong>`;
+  }
+  
+  return description;
+};
+
 export const AdvancedSearch = ({ initialFilters }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
@@ -285,7 +305,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
 
       {/* Resultados */}
       <div className="bg-white rounded-lg shadow-md">
-        <div className="p-6 border-b">
+        <div className="p-6 border-b border-gray-400">
           <h3 className="text-lg font-semibold">
             Resultados ({pagination.total})
             {loading && <span className="ml-2 text-sm text-gray-500">Buscando...</span>}
@@ -332,8 +352,28 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
                       
                     </td>
                     <td className="p-3 font-medium">{result.title}</td>
-                    <td className="p-3 text-sm text-gray-600">{result.description}</td>
-                    <td className="p-3 text-sm">{new Date(result.date).toLocaleDateString()}</td>
+                    <td className="p-3 text-sm text-gray-600">
+                      {result.type === 'expediente' ? (
+                        <span 
+                          dangerouslySetInnerHTML={{ 
+                            __html: formatExpedienteDescription(result.description, result.state) 
+                          }} 
+                        />
+                      ) : (
+                        result.description
+                      )}
+                    </td>
+                    <td className="p-3 text-sm">
+                      <div>
+                        {new Date(result.date).toLocaleDateString()}
+                        <div className="text-xs text-gray-500">
+                          {new Date(result.date).toLocaleTimeString('es-ES', { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })}
+                        </div>
+                      </div>
+                    </td>
                     <td className="p-3 text-sm">{result.area}</td>
                     <td className="p-3 text-sm">{result.responsible}</td>
                     <td className="p-3">

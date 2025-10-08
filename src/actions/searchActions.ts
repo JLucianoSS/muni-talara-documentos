@@ -3,6 +3,8 @@
 import { db } from '@/db';
 import { documents, areas, users, expedientes } from '@/db/schema';
 import { eq, and, or, like, gte, lte, desc, asc, sql } from 'drizzle-orm';
+import { getExpedienteStateInfo } from '@/lib/expedienteUtils';
+import { fromDateString } from '@/lib/dateUtils';
 
 export type SearchFilters = {
   term?: string; // Búsqueda por término
@@ -82,12 +84,16 @@ export async function searchDocuments(filters: SearchFilters) {
     conditions.push(eq(expedientes.state, expedienteState as any));
   }
 
-  // Filtro por rango de fechas
+  // Filtro por rango de fechas (considerando horas completas del día en zona horaria de Perú)
   if (dateFrom) {
-    conditions.push(gte(documents.date, new Date(dateFrom)));
+    const startDate = fromDateString(dateFrom);
+    startDate.setHours(0, 0, 0, 0); // Inicio del día
+    conditions.push(gte(documents.date, startDate));
   }
   if (dateTo) {
-    conditions.push(lte(documents.date, new Date(dateTo)));
+    const endDate = fromDateString(dateTo);
+    endDate.setHours(23, 59, 59, 999); // Final del día
+    conditions.push(lte(documents.date, endDate));
   }
 
   // Ordenamiento
@@ -221,12 +227,16 @@ export async function searchExpedientes(filters: SearchFilters) {
     conditions.push(eq(expedientes.state, expedienteState as any));
   }
 
-  // Filtro por rango de fechas
+  // Filtro por rango de fechas (considerando horas completas del día en zona horaria de Perú)
   if (dateFrom) {
-    conditions.push(gte(expedientes.createdAt, new Date(dateFrom)));
+    const startDate = fromDateString(dateFrom);
+    startDate.setHours(0, 0, 0, 0); // Inicio del día
+    conditions.push(gte(expedientes.createdAt, startDate));
   }
   if (dateTo) {
-    conditions.push(lte(expedientes.createdAt, new Date(dateTo)));
+    const endDate = fromDateString(dateTo);
+    endDate.setHours(23, 59, 59, 999); // Final del día
+    conditions.push(lte(expedientes.createdAt, endDate));
   }
 
   // Ordenamiento
@@ -276,17 +286,20 @@ export async function searchExpedientes(filters: SearchFilters) {
 
   const total = allResults.length;
 
-  const searchResults: SearchResult[] = results.map(exp => ({
-    id: `exp_${exp.id}`,
-    type: 'expediente' as const,
-    title: exp.number,
-    description: `Expediente ${exp.state} - ${exp.areaName}`,
-    date: exp.createdAt,
-    area: exp.areaName || '',
-    responsible: exp.responsibleUsername || '',
-    expedienteNumber: exp.number,
-    state: exp.state,
-  }));
+  const searchResults: SearchResult[] = results.map(exp => {
+    const stateInfo = getExpedienteStateInfo(exp.state as any);
+    return {
+      id: `exp_${exp.id}`,
+      type: 'expediente' as const,
+      title: exp.number,
+      description: `Expediente ${stateInfo.label} - ${exp.areaName}`,
+      date: exp.createdAt,
+      area: exp.areaName || '',
+      responsible: exp.responsibleUsername || '',
+      expedienteNumber: exp.number,
+      state: exp.state,
+    };
+  });
 
   return {
     results: searchResults,

@@ -169,7 +169,7 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
         </ChartCard>
 
         {/* Expedientes por área */}
-        <ChartCard title="Expedientes por Área">
+        {/* <ChartCard title="Expedientes por Área">
           <div className="space-y-3">
             {stats.expedientesByArea.map((item) => (
               <div key={item.areaName} className="flex items-center justify-between">
@@ -186,7 +186,7 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
               </div>
             ))}
           </div>
-        </ChartCard>
+        </ChartCard> */}
       </div>
 
       {/* Actividad reciente */}

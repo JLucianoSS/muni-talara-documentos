@@ -13,7 +13,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-muni-white shadow-md p-4 flex items-center justify-between">
+    <header className="bg-muni-white shadow-xs p-4 flex items-center justify-between">
       <div className="flex items-center space-x-4">
         <img
           src="/logo-muni-talara.png"

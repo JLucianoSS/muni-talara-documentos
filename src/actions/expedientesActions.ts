@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { expedientes, areas, users, documents } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { getPeruDateTime } from '@/lib/dateUtils';
 
 type ExpedienteInput = {
   number: string;
@@ -53,13 +54,14 @@ export async function deleteArea(id: number) {
 }
 
 export async function createExpediente(data: ExpedienteInput) {
+  const now = getPeruDateTime();
   await db.insert(expedientes).values({
     number: data.number,
     state: data.state,
     responsibleUserId: data.responsibleUserId,
     areaId: data.areaId,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: now,
+    updatedAt: now,
   });
   revalidatePath('/dashboard/gestion-expedientes');
 }
@@ -72,7 +74,7 @@ export async function updateExpediente(id: number, data: ExpedienteInput) {
       state: data.state,
       responsibleUserId: data.responsibleUserId,
       areaId: data.areaId,
-      updatedAt: new Date(),
+      updatedAt: getPeruDateTime(),
     })
     .where(eq(expedientes.id, id));
   revalidatePath('/dashboard/gestion-expedientes');

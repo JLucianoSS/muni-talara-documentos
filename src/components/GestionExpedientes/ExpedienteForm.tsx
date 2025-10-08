@@ -60,6 +60,11 @@ export const ExpedienteForm = ({
   const [availableAreas, setAvailableAreas] = useState(areas);
   const [availableUsers, setAvailableUsers] = useState(users);
 
+  // Verificar si el formulario es válido para deshabilitar el botón
+  const isFormValid = watch('number')?.trim() && 
+                     selectedResponsible && selectedResponsible > 0 && 
+                     selectedArea && selectedArea > 0;
+
   useEffect(() => {
     setSelectedResponsible(defaultValues?.responsibleUserId || null);
     setSelectedArea(defaultValues?.areaId || null);
@@ -189,13 +194,18 @@ export const ExpedienteForm = ({
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 cursor-pointer"
         >
           Cancelar
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-[#0093DF] text-[#FFFFFF] rounded-md hover:bg-blue-700"
+          disabled={!isFormValid}
+          className={`px-4 py-2 rounded-md text-white ${
+            isFormValid 
+              ? 'bg-[#0093DF] hover:bg-blue-700 cursor-pointer' 
+              : 'bg-gray-400 cursor-not-allowed'
+          }`}
         >
           Guardar
         </button>

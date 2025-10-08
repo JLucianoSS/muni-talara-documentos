@@ -43,7 +43,7 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'md' }: ModalPr
           <h2 className="text-xl font-bold text-gray-800">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-xl font-semibold"
+            className="text-gray-500 hover:text-gray-700 text-xl font-semibold cursor-pointer"
             aria-label="Cerrar modal"
           >
             ✕

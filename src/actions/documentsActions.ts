@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { documents, areas, users, expedientes } from '@/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { fromDateTimeString, getPeruDateTime } from '@/lib/dateUtils';
 
 export type DocumentInput = {
   expedienteId: number;
@@ -46,15 +47,24 @@ export async function createDocument(data: DocumentInput) {
     throw new Error('Expediente no encontrado');
   }
 
+  // Crear el documento
   await db.insert(documents).values({
     expedienteId: data.expedienteId,
     name: data.name,
-    date: new Date(data.date),
+    date: fromDateTimeString(data.date),
     responsibleUserId: expediente.responsibleUserId,
     areaId: expediente.areaId,
     filePath: data.filePath,
   });
+
+  // Actualizar la fecha de actualización del expediente
+  await db
+    .update(expedientes)
+    .set({ updatedAt: fromDateTimeString(data.date) })
+    .where(eq(expedientes.id, data.expedienteId));
+
   revalidatePath('/dashboard/registro-documentos');
+  revalidatePath('/dashboard/gestion-expedientes');
 }
 
 export async function updateDocument(id: number, data: DocumentInput) {
@@ -72,23 +82,50 @@ export async function updateDocument(id: number, data: DocumentInput) {
     throw new Error('Expediente no encontrado');
   }
 
+  // Actualizar el documento
   await db
     .update(documents)
     .set({
       expedienteId: data.expedienteId,
       name: data.name,
-      date: new Date(data.date),
+      date: fromDateTimeString(data.date),
       responsibleUserId: expediente.responsibleUserId,
       areaId: expediente.areaId,
       filePath: data.filePath,
     })
     .where(eq(documents.id, id));
+
+  // Actualizar la fecha de actualización del expediente
+  await db
+    .update(expedientes)
+    .set({ updatedAt: fromDateTimeString(data.date) })
+    .where(eq(expedientes.id, data.expedienteId));
+
   revalidatePath('/dashboard/registro-documentos');
+  revalidatePath('/dashboard/gestion-expedientes');
 }
 
 export async function deleteDocument(id: number) {
+  // Obtener el expedienteId antes de eliminar el documento
+  const [document] = await db
+    .select({ expedienteId: documents.expedienteId })
+    .from(documents)
+    .where(eq(documents.id, id))
+    .limit(1);
+
+  // Eliminar el documento
   await db.delete(documents).where(eq(documents.id, id));
+
+  // Actualizar la fecha de actualización del expediente si existe
+  if (document) {
+    await db
+      .update(expedientes)
+      .set({ updatedAt: getPeruDateTime() })
+      .where(eq(expedientes.id, document.expedienteId));
+  }
+
   revalidatePath('/dashboard/registro-documentos');
+  revalidatePath('/dashboard/gestion-expedientes');
 }
 
 export async function getDocumentsByExpediente(expedienteId: number) {

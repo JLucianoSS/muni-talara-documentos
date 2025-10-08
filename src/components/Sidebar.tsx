@@ -4,7 +4,7 @@ import { LayoutDashboard, FolderOpen, FileText, Search, Building2 } from 'lucide
 export const Sidebar = () => {
 
   return (
-    <aside className="w-64 bg-muni-white text-gray-800 h-screen p-4 shadow-lg sticky top-0">
+    <aside className="w-64 bg-muni-white text-gray-800 h-screen p-4 shadow-md sticky top-0">
 
       <nav className="space-y-2">
         <Link
