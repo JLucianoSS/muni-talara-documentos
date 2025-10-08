@@ -15,8 +15,8 @@ type DocumentRow = {
   id: number;
   expedienteId: number;
   name: string;
-  expedienteNumber: string;
-  date: string;
+  expedienteNumber: string | null;
+  date: Date;
   filePath: string;
   responsibleUsername: string | null;
   areaName: string | null;
@@ -158,7 +158,7 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
             ) : (
               documents.map((d) => (
                 <tr key={d.id} className="hover:bg-gray-50">
-                  <td className="p-3">{d.expedienteNumber}</td>
+                  <td className="p-3">{d.expedienteNumber || 'N/A'}</td>
                   <td className="p-3">{d.name}</td>
                   <td className="p-3">
                     <div>

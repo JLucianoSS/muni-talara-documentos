@@ -15,7 +15,7 @@ type ReportStats = {
     id: number;
     name: string;
     date: Date;
-    expedienteNumber: string;
+    expedienteNumber: string | null;
     areaName: string;
   }>;
   recentExpedientes: Array<{
@@ -199,7 +199,7 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
                 <div className="flex-1">
                   <p className="font-medium text-gray-800">{doc.name}</p>
                   <p className="text-sm text-gray-600">
-                    {doc.expedienteNumber} • {doc.areaName}
+                    {doc.expedienteNumber || 'N/A'} • {doc.areaName}
                   </p>
                   <p className="text-xs text-gray-500">
                     {new Date(doc.date).toLocaleDateString()}

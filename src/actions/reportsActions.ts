@@ -14,7 +14,7 @@ export type ReportStats = {
     id: number;
     name: string;
     date: Date;
-    expedienteNumber: string;
+    expedienteNumber: string | null;
     areaName: string;
   }>;
   recentExpedientes: Array<{

@@ -12,8 +12,8 @@ export async function GET(request: Request) {
     expedienteState: searchParams.get('expedienteState') || undefined,
     dateFrom: searchParams.get('dateFrom') || undefined,
     dateTo: searchParams.get('dateTo') || undefined,
-    sortBy: (searchParams.get('sortBy') as any) || 'date',
-    sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
+    sortBy: (searchParams.get('sortBy') as 'date' | 'name' | 'expediente') || 'date',
+    sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
     page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
     limit: searchParams.get('limit') ? Number(searchParams.get('limit')) : 20,
   };

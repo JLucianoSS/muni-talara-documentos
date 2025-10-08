@@ -81,7 +81,7 @@ export async function searchDocuments(filters: SearchFilters) {
 
   // Filtro por estado de expediente
   if (expedienteState) {
-    conditions.push(eq(expedientes.state, expedienteState as any));
+    conditions.push(eq(expedientes.state, expedienteState as 'en_tramite' | 'cerrado' | 'pendiente'));
   }
 
   // Filtro por rango de fechas (considerando horas completas del día en zona horaria de Perú)
@@ -160,7 +160,7 @@ export async function searchDocuments(filters: SearchFilters) {
     id: `doc_${doc.id}`,
     type: 'documento' as const,
     title: doc.name,
-    description: `Documento del expediente ${doc.expedienteNumber}`,
+    description: `Documento del expediente ${doc.expedienteNumber || 'N/A'}`,
     date: doc.date,
     area: doc.areaName || '',
     responsible: doc.responsibleUsername || '',
@@ -224,7 +224,7 @@ export async function searchExpedientes(filters: SearchFilters) {
 
   // Filtro por estado
   if (expedienteState) {
-    conditions.push(eq(expedientes.state, expedienteState as any));
+    conditions.push(eq(expedientes.state, expedienteState as 'en_tramite' | 'cerrado' | 'pendiente'));
   }
 
   // Filtro por rango de fechas (considerando horas completas del día en zona horaria de Perú)
@@ -287,7 +287,7 @@ export async function searchExpedientes(filters: SearchFilters) {
   const total = allResults.length;
 
   const searchResults: SearchResult[] = results.map(exp => {
-    const stateInfo = getExpedienteStateInfo(exp.state as any);
+    const stateInfo = getExpedienteStateInfo(exp.state as 'en_tramite' | 'cerrado' | 'pendiente');
     return {
       id: `exp_${exp.id}`,
       type: 'expediente' as const,

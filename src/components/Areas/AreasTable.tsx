@@ -58,8 +58,8 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
       await deleteAreaClient(id);
       setMessage('Área eliminada');
       await refetch();
-    } catch (error: any) {
-      setMessage(error.message || 'No se pudo eliminar el área');
+    } catch (error: unknown) {
+      setMessage(error instanceof Error ? error.message : 'No se pudo eliminar el área');
     } finally {
       setLoading(false);
     }

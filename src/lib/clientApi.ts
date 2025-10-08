@@ -6,7 +6,7 @@ export async function fetchExpedientesClient() {
   return res.json();
 }
 
-export async function createExpedienteClient(data: any) {
+export async function createExpedienteClient(data: { number: string; state: string; responsibleUserId: number; areaId: number }) {
   const res = await fetch('/api/expedientes', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -16,7 +16,7 @@ export async function createExpedienteClient(data: any) {
   return res.json();
 }
 
-export async function updateExpedienteClient(id: number, data: any) {
+export async function updateExpedienteClient(id: number, data: { number: string; state: string; responsibleUserId: number; areaId: number }) {
   const res = await fetch('/api/expedientes', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -87,7 +87,7 @@ export async function fetchDocumentsClient() {
   return res.json();
 }
 
-export async function createDocumentClient(data: any) {
+export async function createDocumentClient(data: { expedienteId: number; name: string; date: string; filePath: string }) {
   const res = await fetch('/api/documentos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -97,7 +97,7 @@ export async function createDocumentClient(data: any) {
   return res.json();
 }
 
-export async function updateDocumentClient(id: number, data: any) {
+export async function updateDocumentClient(id: number, data: { expedienteId: number; name: string; date: string; filePath: string }) {
   const res = await fetch('/api/documentos', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -120,7 +120,7 @@ export async function fetchDocumentsByExpedienteClient(expedienteId: number) {
 }
 
 // ----- Búsqueda -----
-export async function searchClient(filters: any) {
+export async function searchClient(filters: Record<string, unknown>) {
   const params = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {

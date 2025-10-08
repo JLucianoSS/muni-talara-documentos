@@ -20,7 +20,7 @@ export async function uploadToImageKit(buffer: ArrayBuffer, fileName: string, fo
     headers: {
       Authorization: `Basic ${Buffer.from(privateKey + ':').toString('base64')}`,
     },
-    body: form as any,
+    body: form as FormData,
   });
 
   if (!res.ok) {

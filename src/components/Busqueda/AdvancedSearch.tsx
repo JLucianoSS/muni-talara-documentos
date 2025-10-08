@@ -35,7 +35,7 @@ const formatExpedienteDescription = (description: string, state?: string) => {
     return description;
   }
   
-  const stateInfo = getExpedienteStateInfo(state as any);
+  const stateInfo = getExpedienteStateInfo(state as 'en_tramite' | 'cerrado' | 'pendiente');
   const parts = description.split(' - ');
   if (parts.length >= 2) {
     const expedientePart = parts[0]; // "Expediente En trámite"

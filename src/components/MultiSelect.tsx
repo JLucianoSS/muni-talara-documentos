@@ -233,7 +233,7 @@ export const MultiSelect = ({
                 className="px-3 py-2 cursor-pointer hover:bg-[#0093DF] hover:text-white text-gray-600"
                 onClick={handleCreateNew}
               >
-                {createNewMessage}: "{searchQuery}"
+                {createNewMessage}: &quot;{searchQuery}&quot;
               </div>
             ) : (
               <div className="px-3 py-2 text-gray-500 text-center">

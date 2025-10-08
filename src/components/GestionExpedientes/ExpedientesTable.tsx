@@ -111,9 +111,9 @@ export const ExpedientesTable = ({ expedientes: initialExpedientes, areas, users
       await deleteExpedienteClient(id);
       setMessage('Expediente eliminado');
       await refetch();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      setMessage(error.message || 'Error al eliminar expediente');
+      setMessage(error instanceof Error ? error.message : 'Error al eliminar expediente');
     } finally {
       setLoading(false);
     }
