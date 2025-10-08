@@ -4,8 +4,6 @@ import { pgTable, serial, text, timestamp, varchar, pgEnum, unique, foreignKey }
 // Enum para estados de expediente
 export const stateEnum = pgEnum('state', ['en_tramite', 'cerrado', 'pendiente']);
 
-// Enum para tipos de documento (expandible)
-export const typeEnum = pgEnum('type', ['PDF', 'Word', 'Excel', 'Otro']);
 
 // Tabla de Usuarios (para login demo)
 export const users = pgTable('users', {
@@ -37,7 +35,6 @@ export const documents = pgTable('documents', {
   id: serial('id').primaryKey(),
   expedienteId: serial('expediente_id').notNull().references(() => expedientes.id),
   name: varchar('name', { length: 200 }).notNull(), // Nombre del documento para identificarlo
-  type: typeEnum('type').notNull(),
   date: timestamp('date').notNull(),
   responsibleUserId: serial('responsible_user_id').notNull().references(() => users.id),
   areaId: serial('area_id').notNull().references(() => areas.id),

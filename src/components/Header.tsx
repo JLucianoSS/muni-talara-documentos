@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { clearSession } from '@/lib/auth';
+import { LogOut } from 'lucide-react';
 
 export const Header = () => {
   const router = useRouter();
@@ -25,8 +26,9 @@ export const Header = () => {
       </div>
       <button
         onClick={handleLogout}
-        className="bg-muni-blue text-muni-white cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 bg-muni-blue text-muni-white rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
       >
+        <LogOut size={18} />
         Cerrar Sesión
       </button>
     </header>

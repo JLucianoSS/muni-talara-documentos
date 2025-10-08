@@ -9,13 +9,13 @@ import {
   updateDocumentClient,
   deleteDocumentClient,
 } from '@/lib/clientApi';
+import { Edit, Trash2 } from 'lucide-react';
 
 type DocumentRow = {
   id: number;
   expedienteId: number;
   name: string;
   expedienteNumber: string;
-  type: 'PDF' | 'Word' | 'Excel' | 'Otro';
   date: string;
   filePath: string;
   responsibleUsername: string | null;
@@ -107,10 +107,10 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
         </button>
       </div>
 
-      <Modal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} title="Registrar Documento">
+      <Modal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} title="Registrar Documento" size="lg">
         <DocumentForm onSubmit={handleCreate} expedientes={expedientes} onClose={() => setIsCreateOpen(false)} />
       </Modal>
-      <Modal isOpen={!!editDoc} onClose={() => setEditDoc(null)} title="Editar Documento">
+      <Modal isOpen={!!editDoc} onClose={() => setEditDoc(null)} title="Editar Documento" size="lg">
         {editDoc && (
           <DocumentForm
             onSubmit={handleUpdate}
@@ -118,11 +118,11 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
             defaultValues={{
               expedienteId: editDoc.expedienteId,
               name: editDoc.name,
-              type: editDoc.type,
               date: editDoc.date.slice(0, 10),
               filePath: editDoc.filePath,
             }}
             onClose={() => setEditDoc(null)}
+            isEditing={true}
           />
         )}
       </Modal>
@@ -133,7 +133,6 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
             <tr className="bg-blue-100 text-gray-800 ">
               <th className="p-3 text-left">Expediente</th>
               <th className="p-3 text-left">Nombre</th>
-              <th className="p-3 text-left">Tipo</th>
               <th className="p-3 text-left">Fecha</th>
               <th className="p-3 text-left">Área</th>
               <th className="p-3 text-left">Responsable</th>
@@ -160,7 +159,6 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
                 <tr key={d.id} className="hover:bg-gray-50">
                   <td className="p-3">{d.expedienteNumber}</td>
                   <td className="p-3">{d.name}</td>
-                  <td className="p-3">{d.type}</td>
                   <td className="p-3">{new Date(d.date).toLocaleDateString()}</td>
                   <td className="p-3">{d.areaName}</td>
                   <td className="p-3">{d.responsibleUsername}</td>
@@ -176,17 +174,17 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
                   <td className="p-3 space-x-2">
                     <button
                       onClick={() => setEditDoc(d)}
-                      className="px-2 py-1 bg-[#0093DF] text-white rounded-md cursor-pointer"
+                      className="px-2 py-1 bg-[#0093DF] text-white rounded-md cursor-pointer hover:bg-blue-700 transition-colors"
                       title="Editar Documento"
                     >
-                      📝
+                      <Edit size={16} />
                     </button>
                     <button
                       onClick={() => handleDelete(d.id)}
-                      className="px-2 py-1 bg-red-500 text-white rounded-md cursor-pointer"
+                      className="px-2 py-1 bg-red-500 text-white rounded-md cursor-pointer hover:bg-red-600 transition-colors"
                       title="Eliminar Documento"
                     >
-                      🗑️
+                      <Trash2 size={16} />
                     </button>
                   </td>
                 </tr>)

@@ -1,5 +1,6 @@
 
 import Link from 'next/link';
+import { LayoutDashboard, FolderOpen, FileText, Search, Building2 } from 'lucide-react';
 export const Sidebar = () => {
 
   return (
@@ -8,38 +9,44 @@ export const Sidebar = () => {
       <nav className="space-y-2">
         <Link
           href="/dashboard"
-          className="block px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
         >
+          <LayoutDashboard size={20} />
           Dashboard
         </Link>
         <Link
           href="/dashboard/gestion-expedientes"
-          className="block px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
         >
+          <FolderOpen size={20} />
           Expedientes
         </Link>
         <Link
           href="/dashboard/registro-documentos"
-          className="block px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
         >
+          <FileText size={20} />
           Documentos
         </Link>
         <Link
           href="/dashboard/busqueda-avanzada"
-          className="block px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
         >
+          <Search size={20} />
           Búsqueda
         </Link>
         {/* <Link
           href="/dashboard/reportes-estadisticas"
-          className="block px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
         >
+          <BarChart3 size={20} />
           Reportes
         </Link> */}
         <Link
           href="/dashboard/areas"
-          className="block px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
         >
+          <Building2 size={20} />
           Áreas
         </Link>
       </nav>

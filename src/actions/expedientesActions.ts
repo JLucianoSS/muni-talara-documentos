@@ -1,15 +1,15 @@
 'use server';
 
 import { db } from '@/db';
-import { expedientes, areas, users } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { expedientes, areas, users, documents } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 type ExpedienteInput = {
   number: string;
   state: 'en_tramite' | 'cerrado' | 'pendiente';
   responsibleUserId: number;
-  areaName: string; // Cambiado de areaId a areaName
+  areaId: number;
 };
 
 export async function getExpedientes() {
@@ -40,10 +40,10 @@ export async function createArea(name: string) {
   const [newArea] = await db
     .insert(areas)
     .values({ name })
-    .returning({ id: areas.id });
+    .returning({ id: areas.id, name: areas.name });
   revalidatePath('/dashboard/gestion-expedientes');
   revalidatePath('/dashboard/areas');
-  return newArea.id;
+  return { id: newArea.id, name: newArea.name };
 }
 
 export async function deleteArea(id: number) {
@@ -53,25 +53,11 @@ export async function deleteArea(id: number) {
 }
 
 export async function createExpediente(data: ExpedienteInput) {
-  // Buscar o crear el área
-  let areaId: number;
-  const [existingArea] = await db
-    .select({ id: areas.id })
-    .from(areas)
-    .where(eq(areas.name, data.areaName))
-    .limit(1);
-
-  if (existingArea) {
-    areaId = existingArea.id;
-  } else {
-    areaId = await createArea(data.areaName);
-  }
-
   await db.insert(expedientes).values({
     number: data.number,
     state: data.state,
     responsibleUserId: data.responsibleUserId,
-    areaId,
+    areaId: data.areaId,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -79,27 +65,13 @@ export async function createExpediente(data: ExpedienteInput) {
 }
 
 export async function updateExpediente(id: number, data: ExpedienteInput) {
-  // Buscar o crear el área
-  let areaId: number;
-  const [existingArea] = await db
-    .select({ id: areas.id })
-    .from(areas)
-    .where(eq(areas.name, data.areaName))
-    .limit(1);
-
-  if (existingArea) {
-    areaId = existingArea.id;
-  } else {
-    areaId = await createArea(data.areaName);
-  }
-
   await db
     .update(expedientes)
     .set({
       number: data.number,
       state: data.state,
       responsibleUserId: data.responsibleUserId,
-      areaId,
+      areaId: data.areaId,
       updatedAt: new Date(),
     })
     .where(eq(expedientes.id, id));
@@ -109,6 +81,26 @@ export async function updateExpediente(id: number, data: ExpedienteInput) {
 export async function deleteExpediente(id: number) {
   await db.delete(expedientes).where(eq(expedientes.id, id));
   revalidatePath('/dashboard/gestion-expedientes');
+}
+
+// Función para verificar si un área tiene expedientes asignados
+export async function hasExpedientesInArea(areaId: number): Promise<boolean> {
+  const result = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(expedientes)
+    .where(eq(expedientes.areaId, areaId));
+  
+  return result[0]?.count > 0;
+}
+
+// Función para verificar si un expediente tiene documentos
+export async function hasDocumentsInExpediente(expedienteId: number): Promise<boolean> {
+  const result = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(documents)
+    .where(eq(documents.expedienteId, expedienteId));
+  
+  return result[0]?.count > 0;
 }
 
 // --- Client-side helpers (fetch-based) ---

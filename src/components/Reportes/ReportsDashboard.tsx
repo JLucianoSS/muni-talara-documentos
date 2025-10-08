@@ -8,14 +8,12 @@ import { ChartCard } from './ChartCard';
 type ReportStats = {
   totalDocuments: number;
   totalExpedientes: number;
-  documentsByType: Array<{ type: string; count: number }>;
   expedientesByState: Array<{ state: string; count: number }>;
   documentsByArea: Array<{ areaName: string; count: number }>;
   expedientesByArea: Array<{ areaName: string; count: number }>;
   recentDocuments: Array<{
     id: number;
     name: string;
-    type: string;
     date: Date;
     expedienteNumber: string;
     areaName: string;
@@ -65,15 +63,6 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
     }
   };
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'PDF': return 'red';
-      case 'Word': return 'blue';
-      case 'Excel': return 'green';
-      case 'Otro': return 'purple';
-      default: return 'gray';
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -136,25 +125,6 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
 
       {/* Gráficos y estadísticas */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Documentos por tipo */}
-        <ChartCard title="Documentos por Tipo">
-          <div className="space-y-3">
-            {stats.documentsByType.map((item) => (
-              <div key={item.type} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`w-3 h-3 rounded-full bg-${getTypeColor(item.type)}-500`}></div>
-                  <span className="font-medium">{item.type}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold">{item.count}</span>
-                  <span className="text-sm text-gray-500">
-                    ({Math.round((item.count / stats.totalDocuments) * 100)}%)
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </ChartCard>
 
         {/* Expedientes por estado */}
         <ChartCard title="Expedientes por Estado">
@@ -229,14 +199,14 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
                 <div className="flex-1">
                   <p className="font-medium text-gray-800">{doc.name}</p>
                   <p className="text-sm text-gray-600">
-                    {doc.type} • {doc.expedienteNumber} • {doc.areaName}
+                    {doc.expedienteNumber} • {doc.areaName}
                   </p>
                   <p className="text-xs text-gray-500">
                     {new Date(doc.date).toLocaleDateString()}
                   </p>
                 </div>
                 <div className="text-2xl">
-                  {doc.type === 'PDF' ? '📄' : doc.type === 'Word' ? '📝' : doc.type === 'Excel' ? '📊' : '📎'}
+                  📄
                 </div>
               </div>
             ))}

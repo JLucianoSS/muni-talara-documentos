@@ -1,7 +1,15 @@
 import { NextResponse } from 'next/server';
-import { getDocuments, createDocument, updateDocument, deleteDocument } from '@/actions/documentsActions';
+import { getDocuments, createDocument, updateDocument, deleteDocument, getDocumentsByExpediente } from '@/actions/documentsActions';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const expedienteId = searchParams.get('expedienteId');
+  
+  if (expedienteId) {
+    const data = await getDocumentsByExpediente(Number(expedienteId));
+    return NextResponse.json(data);
+  }
+  
   const data = await getDocuments();
   return NextResponse.json(data);
 }

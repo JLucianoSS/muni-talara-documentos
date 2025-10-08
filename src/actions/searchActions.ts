@@ -8,7 +8,6 @@ export type SearchFilters = {
   term?: string; // Búsqueda por término
   year?: number; // Filtro por año
   areaId?: number; // Filtro por área
-  documentType?: string; // Tipo de documento
   expedienteState?: string; // Estado del expediente
   dateFrom?: string; // Fecha desde (ISO)
   dateTo?: string; // Fecha hasta (ISO)
@@ -28,7 +27,6 @@ export type SearchResult = {
   responsible: string;
   expedienteNumber?: string | null;
   documentName?: string;
-  documentType?: string;
   filePath?: string;
   state?: string | null;
 };
@@ -38,7 +36,6 @@ export async function searchDocuments(filters: SearchFilters) {
     term = '',
     year,
     areaId,
-    documentType,
     expedienteState,
     dateFrom,
     dateTo,
@@ -79,10 +76,6 @@ export async function searchDocuments(filters: SearchFilters) {
     conditions.push(eq(documents.areaId, areaId));
   }
 
-  // Filtro por tipo de documento
-  if (documentType) {
-    conditions.push(eq(documents.type, documentType as any));
-  }
 
   // Filtro por estado de expediente
   if (expedienteState) {
@@ -118,7 +111,6 @@ export async function searchDocuments(filters: SearchFilters) {
     .select({
       id: documents.id,
       name: documents.name,
-      type: documents.type,
       date: documents.date,
       filePath: documents.filePath,
       expedienteId: documents.expedienteId,
@@ -141,7 +133,6 @@ export async function searchDocuments(filters: SearchFilters) {
     .select({
       id: documents.id,
       name: documents.name,
-      type: documents.type,
       date: documents.date,
       filePath: documents.filePath,
       expedienteId: documents.expedienteId,
@@ -163,13 +154,12 @@ export async function searchDocuments(filters: SearchFilters) {
     id: `doc_${doc.id}`,
     type: 'documento' as const,
     title: doc.name,
-    description: `Documento ${doc.type} del expediente ${doc.expedienteNumber}`,
+    description: `Documento del expediente ${doc.expedienteNumber}`,
     date: doc.date,
     area: doc.areaName || '',
     responsible: doc.responsibleUsername || '',
     expedienteNumber: doc.expedienteNumber,
     documentName: doc.name,
-    documentType: doc.type,
     filePath: doc.filePath,
     state: doc.expedienteState,
   }));

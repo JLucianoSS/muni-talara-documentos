@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { searchClient, getSearchFiltersClient } from '@/lib/clientApi';
+import { Eye } from 'lucide-react';
+import ExpedienteDocumentsModal from '../ExpedienteDocumentsModal';
+import { getExpedienteStateInfo } from '@/lib/expedienteUtils';
 
 type SearchResult = {
   id: string;
@@ -13,7 +16,6 @@ type SearchResult = {
   responsible: string;
   expedienteNumber?: string;
   documentName?: string;
-  documentType?: string;
   filePath?: string;
   state?: string;
 };
@@ -32,7 +34,6 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
   const [filters, setFilters] = useState({
     year: '',
     areaId: '',
-    documentType: '',
     expedienteState: '',
     dateFrom: '',
     dateTo: '',
@@ -49,6 +50,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
     totalPages: 1,
     total: 0
   });
+  const [viewDocuments, setViewDocuments] = useState<{ expedienteId: number; expedienteNumber: string } | null>(null);
 
   const search = useCallback(async (page = 1) => {
     if (!searchTerm.trim() && !Object.values(filters).some(v => v)) {
@@ -62,7 +64,6 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
         term: searchTerm,
         year: filters.year ? Number(filters.year) : undefined,
         areaId: filters.areaId ? Number(filters.areaId) : undefined,
-        documentType: filters.documentType || undefined,
         expedienteState: filters.expedienteState || undefined,
         dateFrom: filters.dateFrom || undefined,
         dateTo: filters.dateTo || undefined,
@@ -107,7 +108,6 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
     setFilters({
       year: '',
       areaId: '',
-      documentType: '',
       expedienteState: '',
       dateFrom: '',
       dateTo: '',
@@ -206,20 +206,6 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">Tipo de documento</label>
-            <select
-              className="w-full px-3 py-2 border border-gray-400 rounded-md"
-              value={filters.documentType}
-              onChange={(e) => handleFilterChange('documentType', e.target.value)}
-            >
-              <option value="">Todos los tipos</option>
-              <option value="PDF">PDF</option>
-              <option value="Word">Word</option>
-              <option value="Excel">Excel</option>
-              <option value="Otro">Otro</option>
-            </select>
-          </div>
 
           <div>
             <label className="block text-sm text-gray-600 mb-1">Estado del expediente</label>
@@ -229,7 +215,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
               onChange={(e) => handleFilterChange('expedienteState', e.target.value)}
             >
               <option value="">Todos los estados</option>
-              <option value="en_tramite">En Trámite</option>
+              <option value="en_tramite">En trámite</option>
               <option value="cerrado">Cerrado</option>
               <option value="pendiente">Pendiente</option>
             </select>
@@ -343,6 +329,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
                       }`}>
                         {result.type === 'documento' ? '📄 Documento' : '📁 Expediente'}
                       </span>
+                      
                     </td>
                     <td className="p-3 font-medium">{result.title}</td>
                     <td className="p-3 text-sm text-gray-600">{result.description}</td>
@@ -351,6 +338,18 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
                     <td className="p-3 text-sm">{result.responsible}</td>
                     <td className="p-3">
                       <div className="flex items-center gap-2">
+                        {result.type === 'expediente' && (
+                          <button
+                            onClick={() => {
+                              const expedienteId = parseInt(result.id.replace('exp_', ''));
+                              setViewDocuments({ expedienteId, expedienteNumber: result.expedienteNumber || result.title });
+                            }}
+                            className="px-2 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 text-xs cursor-pointer"
+                            title="Ver Documentos"
+                          >
+                            <Eye size={14} />
+                          </button>
+                        )}
                         {result.filePath && (
                           <button
                             onClick={() => handleDownload(result)}
@@ -407,6 +406,13 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
           {message}
         </div>
       )}
+      
+      <ExpedienteDocumentsModal
+        isOpen={!!viewDocuments}
+        onClose={() => setViewDocuments(null)}
+        expedienteId={viewDocuments?.expedienteId || 0}
+        expedienteNumber={viewDocuments?.expedienteNumber || ''}
+      />
     </div>
   );
 };

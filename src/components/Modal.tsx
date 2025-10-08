@@ -7,9 +7,10 @@ type ModalProps = {
   onClose: () => void;
   title: string;
   children: ReactNode;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 };
 
-export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+export const Modal = ({ isOpen, onClose, title, children, size = 'md' }: ModalProps) => {
   const [isVisible, setIsVisible] = useState(isOpen);
 
   useEffect(() => {
@@ -31,9 +32,12 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
       }`}
     >
       <div
-        className={`bg-white p-6 rounded-lg shadow-lg w-full max-w-md transform transition-all duration-300 ${
-          isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-        }`}
+        className={`bg-white p-6 rounded-lg shadow-lg w-full transform transition-all duration-300 ${
+          size === 'sm' ? 'max-w-sm' : 
+          size === 'md' ? 'max-w-md' : 
+          size === 'lg' ? 'max-w-2xl' : 
+          'max-w-4xl'
+        } ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-800">{title}</h2>

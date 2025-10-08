@@ -7,14 +7,12 @@ import { eq, sql, desc, count } from 'drizzle-orm';
 export type ReportStats = {
   totalDocuments: number;
   totalExpedientes: number;
-  documentsByType: Array<{ type: string; count: number }>;
   expedientesByState: Array<{ state: string; count: number }>;
   documentsByArea: Array<{ areaName: string; count: number }>;
   expedientesByArea: Array<{ areaName: string; count: number }>;
   recentDocuments: Array<{
     id: number;
     name: string;
-    type: string;
     date: Date;
     expedienteNumber: string;
     areaName: string;
@@ -46,14 +44,6 @@ export async function getReportStats(): Promise<ReportStats> {
     .from(expedientes);
   const totalExpedientes = totalExpResult?.count || 0;
 
-  // Documentos por tipo
-  const docsByType = await db
-    .select({
-      type: documents.type,
-      count: count()
-    })
-    .from(documents)
-    .groupBy(documents.type);
 
   // Expedientes por estado
   const expByState = await db
@@ -89,7 +79,6 @@ export async function getReportStats(): Promise<ReportStats> {
     .select({
       id: documents.id,
       name: documents.name,
-      type: documents.type,
       date: documents.date,
       expedienteNumber: expedientes.number,
       areaName: areas.name,
@@ -128,14 +117,12 @@ export async function getReportStats(): Promise<ReportStats> {
   return {
     totalDocuments,
     totalExpedientes,
-    documentsByType: docsByType.map(d => ({ type: d.type, count: d.count })),
     expedientesByState: expByState.map(e => ({ state: e.state, count: e.count })),
     documentsByArea: docsByArea.map(d => ({ areaName: d.areaName || 'Sin área', count: d.count })),
     expedientesByArea: expByArea.map(e => ({ areaName: e.areaName || 'Sin área', count: e.count })),
     recentDocuments: recentDocuments.map(d => ({
       id: d.id,
       name: d.name,
-      type: d.type,
       date: d.date,
       expedienteNumber: d.expedienteNumber || '',
       areaName: d.areaName || '',

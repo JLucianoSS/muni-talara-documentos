@@ -8,7 +8,6 @@ import { revalidatePath } from 'next/cache';
 export type DocumentInput = {
   expedienteId: number;
   name: string; // Nombre del documento
-  type: 'PDF' | 'Word' | 'Excel' | 'Otro';
   date: string; // ISO
   filePath: string; // URL de ImageKit
 };
@@ -19,7 +18,6 @@ export async function getDocuments() {
       id: documents.id,
       expedienteId: documents.expedienteId,
       name: documents.name,
-      type: documents.type,
       date: documents.date,
       filePath: documents.filePath,
       responsibleUsername: users.username,
@@ -51,7 +49,6 @@ export async function createDocument(data: DocumentInput) {
   await db.insert(documents).values({
     expedienteId: data.expedienteId,
     name: data.name,
-    type: data.type,
     date: new Date(data.date),
     responsibleUserId: expediente.responsibleUserId,
     areaId: expediente.areaId,
@@ -80,7 +77,6 @@ export async function updateDocument(id: number, data: DocumentInput) {
     .set({
       expedienteId: data.expedienteId,
       name: data.name,
-      type: data.type,
       date: new Date(data.date),
       responsibleUserId: expediente.responsibleUserId,
       areaId: expediente.areaId,
@@ -93,6 +89,26 @@ export async function updateDocument(id: number, data: DocumentInput) {
 export async function deleteDocument(id: number) {
   await db.delete(documents).where(eq(documents.id, id));
   revalidatePath('/dashboard/registro-documentos');
+}
+
+export async function getDocumentsByExpediente(expedienteId: number) {
+  return await db
+    .select({
+      id: documents.id,
+      expedienteId: documents.expedienteId,
+      name: documents.name,
+      date: documents.date,
+      filePath: documents.filePath,
+      responsibleUsername: users.username,
+      areaName: areas.name,
+      expedienteNumber: expedientes.number,
+    })
+    .from(documents)
+    .leftJoin(users, eq(documents.responsibleUserId, users.id))
+    .leftJoin(areas, eq(documents.areaId, areas.id))
+    .leftJoin(expedientes, eq(documents.expedienteId, expedientes.id))
+    .where(eq(documents.expedienteId, expedienteId))
+    .orderBy(desc(documents.date));
 }
 
 

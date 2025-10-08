@@ -28,7 +28,20 @@ export async function updateExpedienteClient(id: number, data: any) {
 
 export async function deleteExpedienteClient(id: number) {
   const res = await fetch(`/api/expedientes?id=${id}`, { method: 'DELETE' });
-  if (!res.ok) throw new Error('delete_failed');
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || 'delete_failed');
+  }
+  return res.json();
+}
+
+export async function fetchExpedientesWithDocumentsClient() {
+  const res = await fetch('/api/expedientes', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'getExpedientesWithDocuments' }),
+  });
+  if (!res.ok) throw new Error('expedientes_with_documents_failed');
   return res.json();
 }
 
@@ -50,7 +63,20 @@ export async function createAreaClient(name: string) {
 
 export async function deleteAreaClient(id: number) {
   const res = await fetch(`/api/areas?id=${id}`, { method: 'DELETE' });
-  if (!res.ok) throw new Error('delete_area_failed');
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || 'delete_area_failed');
+  }
+  return res.json();
+}
+
+export async function fetchAreasWithExpedientesClient() {
+  const res = await fetch('/api/areas', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'getAreasWithExpedientes' }),
+  });
+  if (!res.ok) throw new Error('areas_with_expedientes_failed');
   return res.json();
 }
 
@@ -84,6 +110,12 @@ export async function updateDocumentClient(id: number, data: any) {
 export async function deleteDocumentClient(id: number) {
   const res = await fetch(`/api/documentos?id=${id}`, { method: 'DELETE' });
   if (!res.ok) throw new Error('delete_document_failed');
+  return res.json();
+}
+
+export async function fetchDocumentsByExpedienteClient(expedienteId: number) {
+  const res = await fetch(`/api/documentos?expedienteId=${expedienteId}`);
+  if (!res.ok) throw new Error('documents_by_expediente_failed');
   return res.json();
 }
 

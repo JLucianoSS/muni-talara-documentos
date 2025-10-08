@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { createAreaClient, fetchAreasClient, deleteAreaClient } from '@/lib/clientApi';
+import { createAreaClient, fetchAreasClient, deleteAreaClient, fetchAreasWithExpedientesClient } from '@/lib/clientApi';
+import { Trash2 } from 'lucide-react';
 
-type Area = { id: number; name: string };
+type Area = { id: number; name: string; hasExpedientes?: boolean };
 
 type AreasTableProps = {
   areas: Area[];
@@ -18,7 +19,7 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
   const refetch = async () => {
     setLoading(true);
     try {
-      const data = await fetchAreasClient();
+      const data = await fetchAreasWithExpedientesClient();
       setAreas(data);
     } catch {
       setMessage('Error cargando áreas');
@@ -56,8 +57,8 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
       await deleteAreaClient(id);
       setMessage('Área eliminada');
       await refetch();
-    } catch {
-      setMessage('No se pudo eliminar el área');
+    } catch (error: any) {
+      setMessage(error.message || 'No se pudo eliminar el área');
     } finally {
       setLoading(false);
     }
@@ -111,14 +112,29 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
               areas.map((a) => (
                 <tr key={a.id} className="border-t border-gray-400 hover:bg-gray-50">
                   <td className="p-3">{a.id}</td>
-                  <td className="p-3 font-medium">{a.name}</td>
+                  <td className="p-3 font-medium">
+                    <div>
+                      <div>{a.name}</div>
+                      {a.hasExpedientes && (
+                        <div className="text-xs text-blue-600 mt-1">
+                          📁 Tiene expedientes asignados
+                        </div>
+                      )}
+                    </div>
+                  </td>
                   <td className="p-3">
                     <button
                       onClick={() => handleDelete(a.id)}
-                      className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm cursor-pointer"
-                      title="Eliminar Área"
+                      disabled={a.hasExpedientes}
+                      className={`px-3 py-1 text-white rounded-md text-sm flex items-center gap-2 transition-colors ${
+                        a.hasExpedientes 
+                          ? 'bg-gray-400 cursor-not-allowed opacity-60' 
+                          : 'bg-red-500 hover:bg-red-600 cursor-pointer'
+                      }`}
+                      title={a.hasExpedientes ? "No se puede eliminar: tiene expedientes asignados" : "Eliminar Área"}
                     >
-                      🗑️ Eliminar
+                      <Trash2 size={16} />
+                      Eliminar
                     </button>
                   </td>
                 </tr>

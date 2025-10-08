@@ -9,7 +9,6 @@ export async function GET(request: Request) {
     term: searchParams.get('term') || undefined,
     year: searchParams.get('year') ? Number(searchParams.get('year')) : undefined,
     areaId: searchParams.get('areaId') ? Number(searchParams.get('areaId')) : undefined,
-    documentType: searchParams.get('documentType') || undefined,
     expedienteState: searchParams.get('expedienteState') || undefined,
     dateFrom: searchParams.get('dateFrom') || undefined,
     dateTo: searchParams.get('dateTo') || undefined,
