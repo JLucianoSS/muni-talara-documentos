@@ -101,7 +101,7 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
       <div className="flex justify-between mb-4">
         <button
           onClick={() => setIsCreateOpen(true)}
-          className="px-4 py-2 bg-[#0093DF] text-white rounded-md hover:bg-blue-700"
+          className="px-4 py-2 bg-[#0093DF] hover:bg-[#007AC0] text-white rounded-md cursor-pointer"
         >
           Registrar Documento
         </button>
@@ -127,55 +127,74 @@ export const DocumentsTable = ({ documents: initialDocs, expedientes }: Props) =
         )}
       </Modal>
 
-      <table className="w-full border-collapse bg-white shadow-md rounded-lg">
-        <thead>
-          <tr className="bg-[#0093DF] text-white">
-            <th className="p-3 text-left">Expediente</th>
-            <th className="p-3 text-left">Nombre</th>
-            <th className="p-3 text-left">Tipo</th>
-            <th className="p-3 text-left">Fecha</th>
-            <th className="p-3 text-left">Área</th>
-            <th className="p-3 text-left">Responsable</th>
-            <th className="p-3 text-left">Archivo</th>
-            <th className="p-3 text-left">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan={8} className="p-6 text-center text-gray-500">Cargando documentos...</td>
+      <div className='overflow-x-auto rounded-md'>
+        <table className="w-full border-collapse bg-white shadow-md ">
+          <thead>
+            <tr className="bg-blue-100 text-gray-800 ">
+              <th className="p-3 text-left">Expediente</th>
+              <th className="p-3 text-left">Nombre</th>
+              <th className="p-3 text-left">Tipo</th>
+              <th className="p-3 text-left">Fecha</th>
+              <th className="p-3 text-left">Área</th>
+              <th className="p-3 text-left">Responsable</th>
+              <th className="p-3 text-left">Archivo</th>
+              <th className="p-3 text-left">Acciones</th>
             </tr>
-          ) : documents.length === 0 ? (
-            <tr>
-              <td colSpan={8} className="p-6 text-center text-gray-500">No hay documentos.</td>
-            </tr>
-          ) : (
-            documents.map((d) => (
-              <tr key={d.id} className="border-b hover:bg-gray-50">
-                <td className="p-3">{d.expedienteNumber}</td>
-                <td className="p-3">{d.name}</td>
-                <td className="p-3">{d.type}</td>
-                <td className="p-3">{new Date(d.date).toLocaleDateString()}</td>
-                <td className="p-3">{d.areaName}</td>
-                <td className="p-3">{d.responsibleUsername}</td>
-                <td className="p-3">
-                  {d.filePath ? (
-                    <a href={d.filePath} target="_blank" rel="noreferrer" className="text-[#0093DF] underline">
-                      Ver/Descargar
-                    </a>
-                  ) : (
-                    '-'
-                  )}
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={8} className="p-6 text-center text-gray-500">
+                  <div className="p-6 text-center text-gray-500">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0093DF] mx-auto mb-2"></div>
+                    Cargando documentos...
+                  </div>
                 </td>
-                <td className="p-3 space-x-2">
-                  <button onClick={() => setEditDoc(d)} className="px-2 py-1 bg-[#0093DF] text-white rounded-md">📝</button>
-                  <button onClick={() => handleDelete(d.id)} className="px-2 py-1 bg-red-500 text-white rounded-md">🗑️</button>
-                </td>
-              </tr>)
-            )
-          )}
-        </tbody>
-      </table>
+              </tr>
+            ) : documents.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="p-6 text-center text-gray-500">No hay documentos.</td>
+              </tr>
+            ) : (
+              documents.map((d) => (
+                <tr key={d.id} className="hover:bg-gray-50">
+                  <td className="p-3">{d.expedienteNumber}</td>
+                  <td className="p-3">{d.name}</td>
+                  <td className="p-3">{d.type}</td>
+                  <td className="p-3">{new Date(d.date).toLocaleDateString()}</td>
+                  <td className="p-3">{d.areaName}</td>
+                  <td className="p-3">{d.responsibleUsername}</td>
+                  <td className="p-3">
+                    {d.filePath ? (
+                      <a href={d.filePath} target="_blank" rel="noreferrer" className="text-[#0093DF] underline">
+                        Ver/Descargar
+                      </a>
+                    ) : (
+                      '-'
+                    )}
+                  </td>
+                  <td className="p-3 space-x-2">
+                    <button
+                      onClick={() => setEditDoc(d)}
+                      className="px-2 py-1 bg-[#0093DF] text-white rounded-md cursor-pointer"
+                      title="Editar Documento"
+                    >
+                      📝
+                    </button>
+                    <button
+                      onClick={() => handleDelete(d.id)}
+                      className="px-2 py-1 bg-red-500 text-white rounded-md cursor-pointer"
+                      title="Eliminar Documento"
+                    >
+                      🗑️
+                    </button>
+                  </td>
+                </tr>)
+              )
+            )}
+          </tbody>
+        </table>
+      </div>
       {message && <p className="text-sm text-gray-600 mt-2">{message}</p>}
     </div>
   );

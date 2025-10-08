@@ -69,7 +69,7 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
         <div className="flex-1">
           <label className="block text-sm text-gray-600 mb-1">Nueva área</label>
           <input
-            className="w-full border rounded-md px-3 py-2"
+            className="w-full border border-gray-400 rounded-md px-3 py-2"
             placeholder="Ej. Secretaría"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -78,13 +78,13 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
         <button
           onClick={handleCreate}
           disabled={!canCreate || loading}
-          className="px-4 py-2 rounded-md bg-[#0093DF] text-white disabled:opacity-60"
+          className="px-4 py-2 rounded-md bg-[#0093DF] text-white disabled:opacity-60 cursor-pointer"
         >
           {loading ? 'Guardando...' : 'Agregar'}
         </button>
       </div>
 
-      <div className="overflow-x-auto border rounded-md">
+      <div className="overflow-x-auto border border-gray-400 rounded-md">
         <table className="min-w-full">
           <thead className="bg-gray-50">
             <tr>
@@ -96,7 +96,12 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={3} className="p-6 text-center text-gray-500">Cargando áreas...</td>
+                <td colSpan={3} className="p-6 text-center text-gray-500">
+                  <div className="p-6 text-center text-gray-500">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0093DF] mx-auto mb-2"></div>
+                    Cargando áreas...
+                  </div>
+                </td>
               </tr>
             ) : areas.length === 0 ? (
               <tr>
@@ -104,13 +109,14 @@ export const AreasTable = ({ areas: initialAreas }: AreasTableProps) => {
               </tr>
             ) : (
               areas.map((a) => (
-                <tr key={a.id} className="border-t hover:bg-gray-50">
+                <tr key={a.id} className="border-t border-gray-400 hover:bg-gray-50">
                   <td className="p-3">{a.id}</td>
                   <td className="p-3 font-medium">{a.name}</td>
                   <td className="p-3">
                     <button
                       onClick={() => handleDelete(a.id)}
-                      className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm"
+                      className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm cursor-pointer"
+                      title="Eliminar Área"
                     >
                       🗑️ Eliminar
                     </button>

@@ -26,11 +26,11 @@ export type SearchResult = {
   date: Date;
   area: string;
   responsible: string;
-  expedienteNumber?: string;
+  expedienteNumber?: string | null;
   documentName?: string;
   documentType?: string;
   filePath?: string;
-  state?: string;
+  state?: string | null;
 };
 
 export async function searchDocuments(filters: SearchFilters) {

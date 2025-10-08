@@ -16,7 +16,7 @@ type ReportStats = {
     id: number;
     name: string;
     type: string;
-    date: string;
+    date: Date;
     expedienteNumber: string;
     areaName: string;
   }>;
@@ -24,7 +24,7 @@ type ReportStats = {
     id: number;
     number: string;
     state: string;
-    createdAt: string;
+    createdAt: Date;
     areaName: string;
   }>;
   monthlyStats: Array<{

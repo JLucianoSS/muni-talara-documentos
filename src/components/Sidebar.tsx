@@ -10,7 +10,7 @@ export const Sidebar = () => {
           href="/dashboard"
           className="block px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
         >
-          Inicio - Reportes
+          Dashboard
         </Link>
         <Link
           href="/dashboard/gestion-expedientes"

@@ -150,14 +150,14 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
             <input
               type="text"
               placeholder="Buscar por expediente, documento, responsable..."
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-[#0093DF] focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-400 rounded-md focus:border-transparent"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <button
             onClick={clearFilters}
-            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 cursor-pointer"
           >
             Limpiar
           </button>
@@ -168,7 +168,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Tipo de búsqueda</label>
             <select
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-gray-400 rounded-md"
               value={filters.searchType}
               onChange={(e) => handleFilterChange('searchType', e.target.value)}
             >
@@ -181,7 +181,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Año</label>
             <select
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-gray-400 rounded-md"
               value={filters.year}
               onChange={(e) => handleFilterChange('year', e.target.value)}
             >
@@ -195,7 +195,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Área</label>
             <select
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-gray-400 rounded-md"
               value={filters.areaId}
               onChange={(e) => handleFilterChange('areaId', e.target.value)}
             >
@@ -209,7 +209,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Tipo de documento</label>
             <select
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-gray-400 rounded-md"
               value={filters.documentType}
               onChange={(e) => handleFilterChange('documentType', e.target.value)}
             >
@@ -224,7 +224,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Estado del expediente</label>
             <select
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-gray-400 rounded-md"
               value={filters.expedienteState}
               onChange={(e) => handleFilterChange('expedienteState', e.target.value)}
             >
@@ -239,7 +239,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
             <label className="block text-sm text-gray-600 mb-1">Fecha desde</label>
             <input
               type="date"
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-gray-400 rounded-md"
               value={filters.dateFrom}
               onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
             />
@@ -249,7 +249,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
             <label className="block text-sm text-gray-600 mb-1">Fecha hasta</label>
             <input
               type="date"
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-gray-400 rounded-md"
               value={filters.dateTo}
               onChange={(e) => handleFilterChange('dateTo', e.target.value)}
             />
@@ -258,7 +258,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Ordenar por</label>
             <select
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-gray-400 rounded-md"
               value={filters.sortBy}
               onChange={(e) => handleFilterChange('sortBy', e.target.value)}
             >
@@ -334,7 +334,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
               </thead>
               <tbody>
                 {results.map((result) => (
-                  <tr key={result.id} className="border-b hover:bg-gray-50">
+                  <tr key={result.id} className="border-b border-gray-400 hover:bg-gray-50">
                     <td className="p-3">
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         result.type === 'documento' 
@@ -354,7 +354,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
                         {result.filePath && (
                           <button
                             onClick={() => handleDownload(result)}
-                            className="px-2 py-1 bg-[#0093DF] text-white rounded-md hover:bg-blue-700 text-xs"
+                            className="px-2 py-1 bg-[#0093DF] text-white rounded-md hover:bg-blue-700 text-xs cursor-pointer"
                             title="Descargar"
                           >
                             📥
@@ -362,7 +362,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
                         )}
                         <button
                           onClick={() => handleShare(result)}
-                          className="px-2 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-xs"
+                          className="px-2 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-xs cursor-pointer"
                           title="Compartir"
                         >
                           🔗
@@ -386,14 +386,14 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
               <button
                 onClick={() => handlePageChange(pagination.page - 1)}
                 disabled={pagination.page === 1}
-                className="px-3 py-1 border rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 border border-gray-400 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Anterior
               </button>
               <button
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={pagination.page === pagination.totalPages}
-                className="px-3 py-1 border rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 border border-gray-400 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Siguiente
               </button>

@@ -115,7 +115,7 @@ export const ExpedientesTable = ({ expedientes: initialExpedientes, areas, users
       <div className="flex justify-between mb-4">
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="px-4 py-2 bg-[#0093DF] text-[#FFFFFF] rounded-md hover:bg-blue-700"
+          className="px-4 py-2 bg-[#0093DF] hover:bg-[#007AC0] text-[#FFFFFF] rounded-md cursor-pointer"
         >
           Crear Expediente
         </button>
@@ -176,57 +176,66 @@ export const ExpedientesTable = ({ expedientes: initialExpedientes, areas, users
           />
         )}
       </Modal>
-      <table className="w-full border-collapse bg-[#FFFFFF] shadow-md rounded-lg">
-        <thead>
-          <tr className="bg-[#0093DF] text-[#FFFFFF]">
-            <th className="p-3 text-left">Número</th>
-            <th className="p-3 text-left">Estado</th>
-            <th className="p-3 text-left">Responsable</th>
-            <th className="p-3 text-left">Área</th>
-            <th className="p-3 text-left">Creado</th>
-            <th className="p-3 text-left">Actualizado</th>
-            <th className="p-3 text-left">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan={7} className="p-6 text-center text-gray-500">Cargando expedientes...</td>
+      <div className='overflow-x-auto rounded-md'>
+        <table className="w-full border-collapse bg-[#FFFFFF] shadow-md rounded-lg">
+          <thead>
+            <tr className="bg-blue-100 text-gray-800">
+              <th className="p-3 text-left">Número</th>
+              <th className="p-3 text-left">Estado</th>
+              <th className="p-3 text-left">Responsable</th>
+              <th className="p-3 text-left">Área</th>
+              <th className="p-3 text-left">Creado</th>
+              <th className="p-3 text-left">Actualizado</th>
+              <th className="p-3 text-left">Acciones</th>
             </tr>
-          ) : filteredExpedientes.length === 0 ? (
-            <tr>
-              <td colSpan={7} className="p-6 text-center text-gray-500">No hay expedientes.</td>
-            </tr>
-          ) : (
-            filteredExpedientes.map((exp) => (
-              <tr key={exp.id} className="border-b hover:bg-gray-50">
-                <td className="p-3">{exp.number}</td>
-                <td className="p-3">{exp.state}</td>
-                <td className="p-3">{exp.responsibleUsername}</td>
-                <td className="p-3">{exp.areaName}</td>
-                <td className="p-3">{new Date(exp.createdAt).toLocaleDateString()}</td>
-                <td className="p-3">{new Date(exp.updatedAt).toLocaleDateString()}</td>
-                <td className="p-3">
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => setEditExpediente(exp)}
-                      className="px-2 py-1 bg-[#0093DF] text-[#FFFFFF] rounded-md hover:bg-blue-700"
-                    >
-                      📝
-                    </button>
-                    <button
-                      onClick={() => handleDelete(exp.id)}
-                      className="px-2 py-1 bg-red-500 text-[#FFFFFF] rounded-md hover:bg-red-600"
-                    >
-                      🗑️
-                    </button>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={7} className="p-6 text-center text-gray-500">
+                  <div className="p-6 text-center text-gray-500">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0093DF] mx-auto mb-2"></div>
+                    Cargando expedientes...
                   </div>
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : filteredExpedientes.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="p-6 text-center text-gray-500">No hay expedientes.</td>
+              </tr>
+            ) : (
+              filteredExpedientes.map((exp) => (
+                <tr key={exp.id} className="hover:bg-gray-50">
+                  <td className="p-3">{exp.number}</td>
+                  <td className="p-3">{exp.state}</td>
+                  <td className="p-3">{exp.responsibleUsername}</td>
+                  <td className="p-3">{exp.areaName}</td>
+                  <td className="p-3">{new Date(exp.createdAt).toLocaleDateString()}</td>
+                  <td className="p-3">{new Date(exp.updatedAt).toLocaleDateString()}</td>
+                  <td className="p-3">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => setEditExpediente(exp)}
+                        className="px-2 py-1 bg-[#0093DF] text-[#FFFFFF] rounded-md hover:bg-blue-700 cursor-pointer"
+                        title="Editar Expediente"
+                      >
+                        📝
+                      </button>
+                      <button
+                        onClick={() => handleDelete(exp.id)}
+                        className="px-2 py-1 bg-red-500 text-[#FFFFFF] rounded-md hover:bg-red-600 cursor-pointer"
+                        title="Eliminar Expediente"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
