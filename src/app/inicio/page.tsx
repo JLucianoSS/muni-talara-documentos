@@ -26,9 +26,14 @@ export default async function InicioPage() {
           />
         </div>
 
-        <h1 className="text-center text-2xl md:text-3xl font-semibold text-gray-800">
-          Sistema de gestión de documentos
-        </h1>
+        <div>
+          <h2 className="text-xl text-center font-semibold text-gray-800">
+            SGD Unidad de Logística
+          </h2>
+          <p className="text-xs text-gray-500 text-center ">
+            Sistema de Gestión Documental
+          </p>
+        </div>
 
         <Link href="/login" className="w-full max-w-[250px]">
           <button className="w-full cursor-pointer bg-[#0093DF] hover:bg-[#007AC0] text-white font-medium py-2.5 rounded-lg transition">

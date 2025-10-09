@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { getReportsClient } from '@/lib/clientApi';
 import { StatsCard } from './StatsCard';
 import { ChartCard } from './ChartCard';
@@ -194,7 +195,7 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
         {/* Documentos recientes */}
         <ChartCard title="Documentos Recientes">
           <div className="space-y-4">
-            {stats.recentDocuments.map((doc) => (
+            {stats.recentDocuments.slice(0, 5).map((doc) => (
               <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex-1">
                   <p className="font-medium text-gray-800">{doc.name}</p>
@@ -210,13 +211,24 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
                 </div>
               </div>
             ))}
+            {stats.recentDocuments.length > 5 && (
+              <div className="pt-2 border-t border-gray-200">
+                <Link 
+                  href="/dashboard/registro-documentos"
+                  className="text-[#0093DF] hover:text-blue-700 text-sm font-medium flex items-center gap-1"
+                >
+                  Ver todos los documentos
+                  <span>→</span>
+                </Link>
+              </div>
+            )}
           </div>
         </ChartCard>
 
         {/* Expedientes recientes */}
         <ChartCard title="Expedientes Recientes">
           <div className="space-y-4">
-            {stats.recentExpedientes.map((exp) => (
+            {stats.recentExpedientes.slice(0, 5).map((exp) => (
               <div key={exp.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex-1">
                   <p className="font-medium text-gray-800">{exp.number}</p>
@@ -236,6 +248,17 @@ export const ReportsDashboard = ({ stats: initialStats }: Props) => {
                 </div>
               </div>
             ))}
+            {stats.recentExpedientes.length > 5 && (
+              <div className="pt-2 border-t border-gray-200">
+                <Link 
+                  href="/dashboard/gestion-expedientes"
+                  className="text-[#0093DF] hover:text-blue-700 text-sm font-medium flex items-center gap-1"
+                >
+                  Ver todos los expedientes
+                  <span>→</span>
+                </Link>
+              </div>
+            )}
           </div>
         </ChartCard>
       </div>

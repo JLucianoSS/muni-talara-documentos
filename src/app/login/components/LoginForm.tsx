@@ -60,75 +60,84 @@ export const LoginForm = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <div className="flex justify-center mb-6">
-          <img
-            src="/logo-muni-talara.png"
-            alt="Logo Municipalidad de Talara"
-            className="h-16"
-          />
-        </div>
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Sistema de Gestión Documental
-        </h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm w-full max-w-md">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex justify-center mb-4">
+            <img
+              src="/logo-muni-talara.png"
+              alt="Logo Municipalidad de Talara"
+              className="h-16"
+            />
+          </div>
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              Usuario
-            </label>
-            <input
-              id="username"
-              type="text"
-              {...register('username')}
-              className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
-                errors.username ? 'border-red-500' : ''
-              }`}
-              placeholder="admin"
-            />
-            {errors.username && (
-              <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
-            )}
+            <h2 className="text-xl text-center font-semibold text-gray-800">
+              SGD Unidad de Logística
+            </h2>
+            <p className="text-xs text-gray-500 text-center ">
+              Sistema de Gestión Documental
+            </p>
           </div>
-          <div className="relative">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Contraseña
-            </label>
-            <input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              {...register('password')}
-              className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
-                errors.password ? 'border-red-500' : ''
-              }`}
-              placeholder="••••••••"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 top-6"
-              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-            >
-              {showPassword ? <EyeOff className="h-5 w-5 text-gray-500" /> : <Eye className="h-5 w-5 text-gray-500" />}
-            </button>
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-            )}
-          </div>
-          {loginError && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-3">
-              <p className="text-red-600 text-sm">{loginError}</p>
+        </div>
+        <div className="p-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                Usuario
+              </label>
+              <input
+                id="username"
+                type="text"
+                {...register('username')}
+                className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#0093DF] focus:border-[#0093DF] ${
+                  errors.username ? 'border-red-500' : ''
+                }`}
+                placeholder="admin"
+              />
+              {errors.username && (
+                <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
+              )}
             </div>
-          )}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`w-full bg-[#0093DF] text-white cursor-pointer py-2 px-4 rounded-md hover:bg-[#007AC0] focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-              isLoading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
-          </button>
-        </form>
+            <div className="relative">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Contraseña
+              </label>
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                {...register('password')}
+                className={`mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#0093DF] focus:border-[#0093DF] ${
+                  errors.password ? 'border-red-500' : ''
+                }`}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 top-6"
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              >
+                {showPassword ? <EyeOff className="h-5 w-5 text-gray-500" /> : <Eye className="h-5 w-5 text-gray-500" />}
+              </button>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              )}
+            </div>
+            {loginError && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-3">
+                <p className="text-red-600 text-sm">{loginError}</p>
+              </div>
+            )}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full bg-[#0093DF] text-white cursor-pointer py-2 px-4 rounded-md hover:bg-[#007AC0] focus:outline-none focus:ring-2 focus:ring-[#0093DF] ${
+                isLoading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

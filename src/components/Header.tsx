@@ -20,13 +20,18 @@ export const Header = () => {
           alt="Logo Municipalidad de Talara"
           className="h-10"
         />
-        <h1 className="text-xl font-semibold text-gray-800">
-          Sistema de Gestión Documental
-        </h1>
+        <div>
+          <h1 className="text-xl font-semibold text-gray-800">
+            SGD Unidad de Logística
+          </h1>
+          <p className="text-xs text-gray-500 ">
+            Sistema de Gestión Documental
+          </p>
+        </div>
       </div>
       <button
         onClick={handleLogout}
-        className="flex items-center gap-2 px-4 py-2 bg-muni-blue text-muni-white rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 bg-muni-blue text-muni-white rounded-md hover:bg-gray-200 transition-colors cursor-pointer"
       >
         <LogOut size={18} />
         Cerrar Sesión
