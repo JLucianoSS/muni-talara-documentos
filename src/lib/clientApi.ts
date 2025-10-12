@@ -35,11 +35,15 @@ export async function deleteExpedienteClient(id: number) {
   return res.json();
 }
 
-export async function fetchExpedientesWithDocumentsClient() {
+export async function fetchExpedientesWithDocumentsClient(page: number = 1, limit: number = 10) {
   const res = await fetch('/api/expedientes', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'getExpedientesWithDocuments' }),
+    body: JSON.stringify({ 
+      action: 'getExpedientesWithDocuments',
+      page,
+      limit
+    }),
   });
   if (!res.ok) throw new Error('expedientes_with_documents_failed');
   return res.json();

@@ -12,7 +12,7 @@ type DeletedDocument = {
   name: string;
   date: Date;
   filePath: string;
-  deletedAt: Date;
+  deletedAt: Date | null;
   responsibleUsername: string | null;
   areaName: string | null;
   expedienteNumber: string | null;
@@ -134,19 +134,19 @@ export const TrashDocumentsTable = ({ documents: initialDocuments, pagination: i
                   {new Date(doc.date).toLocaleDateString('es-ES')}
                 </td>
                 <td className="p-4 text-sm text-red-600">
-                  {new Date(doc.deletedAt).toLocaleDateString('es-ES', {
+                  {doc.deletedAt ? new Date(doc.deletedAt).toLocaleDateString('es-ES', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit'
-                  })}
+                  }) : 'N/A'}
                 </td>
                 <td className="p-4">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleDownload(doc.filePath)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors cursor-pointer"
                       title="Ver/Descargar"
                     >
                       <Eye size={16} />
@@ -154,7 +154,7 @@ export const TrashDocumentsTable = ({ documents: initialDocuments, pagination: i
                     <button
                       onClick={() => handleRestore(doc.id)}
                       disabled={loading === doc.id}
-                      className="p-2 text-green-600 hover:bg-green-50 rounded-md transition-colors disabled:opacity-50"
+                      className="p-2 text-green-600 hover:bg-green-50 rounded-md transition-colors disabled:opacity-50 cursor-pointer"
                       title="Restaurar"
                     >
                       <RotateCcw size={16} />
@@ -162,7 +162,7 @@ export const TrashDocumentsTable = ({ documents: initialDocuments, pagination: i
                     <button
                       onClick={() => handlePermanentDelete(doc.id)}
                       disabled={loading === doc.id}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50"
+                      className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50 cursor-pointer"
                       title="Eliminar permanentemente"
                     >
                       <Trash2 size={16} />

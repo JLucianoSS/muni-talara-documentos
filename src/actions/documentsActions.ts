@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { documents, areas, users, expedientes } from '@/db/schema';
-import { eq, desc, isNull, isNotNull, sql } from 'drizzle-orm';
+import { eq, desc, isNull, isNotNull, sql, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { fromDateTimeString, getPeruDateTime } from '@/lib/dateUtils';
 
@@ -170,8 +170,10 @@ export async function getDocumentsByExpediente(expedienteId: number) {
     .leftJoin(users, eq(documents.responsibleUserId, users.id))
     .leftJoin(areas, eq(documents.areaId, areas.id))
     .leftJoin(expedientes, eq(documents.expedienteId, expedientes.id))
-    .where(eq(documents.expedienteId, expedienteId))
-    .where(isNull(documents.deletedAt)) // Solo documentos no eliminados
+    .where(and(
+      eq(documents.expedienteId, expedienteId),
+      isNull(documents.deletedAt)
+    ))
     .orderBy(desc(documents.date));
 }
 
