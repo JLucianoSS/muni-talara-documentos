@@ -51,6 +51,7 @@ export const TrashDocumentsTable = ({ documents: initialDocuments, pagination: i
     setLoading(id);
     try {
       await restoreDocument(id);
+      try { window.dispatchEvent(new Event('trash-changed')); } catch {}
       await refetch();
     } catch (error) {
       console.error('Error al restaurar documento:', error);
@@ -67,6 +68,7 @@ export const TrashDocumentsTable = ({ documents: initialDocuments, pagination: i
     setLoading(id);
     try {
       await permanentlyDeleteDocument(id);
+      try { window.dispatchEvent(new Event('trash-changed')); } catch {}
       await refetch();
     } catch (error) {
       console.error('Error al eliminar permanentemente:', error);

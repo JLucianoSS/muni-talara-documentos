@@ -104,6 +104,8 @@ export const DocumentsTableWithPagination = ({ documents: initialDocs, expedient
     try {
       await deleteDocumentClient(id);
       setMessage('Documento eliminado');
+      // Notificar cambios en la papelera para actualizar el badge
+      try { window.dispatchEvent(new Event('trash-changed')); } catch {}
       await refetch();
     } catch {
       setMessage('No se pudo eliminar el documento');
