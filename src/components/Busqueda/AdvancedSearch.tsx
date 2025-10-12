@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { searchClient, getSearchFiltersClient } from '@/lib/clientApi';
-import { Eye } from 'lucide-react';
+import { Eye, X } from 'lucide-react';
 import ExpedienteDocumentsModal from '../ExpedienteDocumentsModal';
 import { getExpedienteStateInfo } from '@/lib/expedienteUtils';
 
@@ -43,7 +43,8 @@ const formatExpedienteDescription = (description: string, state?: string) => {
     
     // Extraer el estado de la parte del expediente
     const expedienteText = expedientePart.replace(stateInfo.label, '');
-    return `${expedienteText}<strong>${stateInfo.label}</strong>`;
+    return `${expedienteText}<strong>${stateInfo.label}</strong>
+    `;
   }
   
   return description;
@@ -91,7 +92,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
         sortOrder: filters.sortOrder,
         searchType: filters.searchType,
         page,
-        limit: 20
+        limit: 10
       };
 
       const data = await searchClient(searchFilters);
@@ -137,6 +138,10 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
     });
   };
 
+  const clearSearchTerm = () => {
+    setSearchTerm('');
+  };
+
   const handlePageChange = (newPage: number) => {
     search(newPage);
   };
@@ -166,22 +171,48 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
       {/* Barra de búsqueda principal */}
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex gap-4 mb-4">
-          <div className="flex-1">
+          <div className="flex-1 relative">
             <input
               type="text"
-              placeholder="Buscar por expediente, documento, responsable..."
-              className="w-full px-4 py-2 border border-gray-400 rounded-md focus:border-transparent"
+              placeholder="Buscar códigos, nombres, expedientes... (ej: O.C, 00491, Titulo...)"
+              className="w-full px-4 py-2 pr-10 border border-gray-400 rounded-md focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[#0093DF]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
+            {searchTerm && (
+              <button
+                onClick={clearSearchTerm}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                title="Limpiar búsqueda"
+              >
+                <X size={18} />
+              </button>
+            )}
           </div>
           <button
             onClick={clearFilters}
             className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 cursor-pointer"
           >
-            Limpiar
+            Limpiar Todo
           </button>
         </div>
+
+        {/* Información sobre búsqueda flexible */}
+        {/* <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <p className="text-sm text-blue-800">
+            <strong>💡 Búsqueda flexible:</strong> Ignora mayúsculas, tildes y caracteres especiales. 
+            <br />
+            <strong>Ejemplos:</strong>
+            <br />
+            • "maria" → encuentra "María", "MARÍA", "maría"
+            <br />
+            • "O.C" o "o.c" → encuentra "O.C 00491_2023", "o.c 00491_2023"
+            <br />
+            • "00491" → encuentra "O.C 00491_2023", "O.S 1319_2025"
+            <br />
+            • "2023" → encuentra "O.C 00491_2023", "EXP-2023-001"
+          </p>
+        </div> */}
 
         {/* Filtros avanzados */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -417,7 +448,7 @@ export const AdvancedSearch = ({ initialFilters }: Props) => {
 
         {/* Paginación */}
         {pagination.totalPages > 1 && (
-          <div className="p-6 border-t flex justify-between items-center">
+          <div className="p-6 border-t border-gray-400 flex justify-between items-center">
             <div className="text-sm text-gray-600">
               Página {pagination.page} de {pagination.totalPages}
             </div>

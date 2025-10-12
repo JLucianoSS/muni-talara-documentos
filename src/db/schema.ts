@@ -39,6 +39,7 @@ export const documents = pgTable('documents', {
   responsibleUserId: serial('responsible_user_id').notNull().references(() => users.id),
   areaId: serial('area_id').notNull().references(() => areas.id),
   filePath: text('file_path').notNull(),  // Ruta del archivo subido, e.g., '/uploads/doc-123.pdf'
+  deletedAt: timestamp('deleted_at'), // Para papelera - null = no eliminado, timestamp = fecha de eliminación
 });
 
 // Relaciones (para queries relacionales en Drizzle)

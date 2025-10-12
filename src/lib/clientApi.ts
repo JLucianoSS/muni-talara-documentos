@@ -1,7 +1,7 @@
 // Helpers client-only para consumir la API con fetch relativo
 
-export async function fetchExpedientesClient() {
-  const res = await fetch('/api/expedientes');
+export async function fetchExpedientesClient(page: number = 1, limit: number = 10) {
+  const res = await fetch(`/api/expedientes?page=${page}&limit=${limit}`);
   if (!res.ok) throw new Error('failed_fetch');
   return res.json();
 }
@@ -81,8 +81,8 @@ export async function fetchAreasWithExpedientesClient() {
 }
 
 // ----- Documentos -----
-export async function fetchDocumentsClient() {
-  const res = await fetch('/api/documentos');
+export async function fetchDocumentsClient(page: number = 1, limit: number = 10) {
+  const res = await fetch(`/api/documentos?page=${page}&limit=${limit}`);
   if (!res.ok) throw new Error('documents_failed');
   return res.json();
 }
@@ -116,6 +116,12 @@ export async function deleteDocumentClient(id: number) {
 export async function fetchDocumentsByExpedienteClient(expedienteId: number) {
   const res = await fetch(`/api/documentos?expedienteId=${expedienteId}`);
   if (!res.ok) throw new Error('documents_by_expediente_failed');
+  return res.json();
+}
+
+export async function fetchDeletedDocumentsClient(page: number = 1, limit: number = 10) {
+  const res = await fetch(`/api/documentos?deleted=true&page=${page}&limit=${limit}`);
+  if (!res.ok) throw new Error('deleted_documents_failed');
   return res.json();
 }
 

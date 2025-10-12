@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { LayoutDashboard, FolderOpen, FileText, Search, Building2 } from 'lucide-react';
+import { LayoutDashboard, FolderOpen, FileText, Search, Building2, Trash2 } from 'lucide-react';
 export const Sidebar = () => {
 
   return (
@@ -28,6 +28,7 @@ export const Sidebar = () => {
           <FileText size={20} />
           Documentos
         </Link>
+        
         <Link
           href="/dashboard/busqueda-avanzada"
           className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
@@ -48,6 +49,13 @@ export const Sidebar = () => {
         >
           <Building2 size={20} />
           Áreas
+        </Link>
+        <Link
+          href="/dashboard/papelera"
+          className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
+        >
+          <Trash2 size={20} />
+          Papelera
         </Link>
       </nav>
     </aside>

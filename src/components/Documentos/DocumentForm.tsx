@@ -126,11 +126,10 @@ export const DocumentForm = ({ onSubmit, onClose, expedientes, defaultValues, is
           <input
             {...register('date')}
             type="datetime-local"
-            disabled
-            className={`w-full border rounded-md px-3 py-2 bg-gray-100 text-gray-600 cursor-not-allowed ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
+            className={`w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0093DF] focus:border-[#0093DF] ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
           />
           <p className="text-xs text-gray-500 mt-1">
-            Se establecerá automáticamente la fecha
+            Puede modificar la fecha y hora según necesite
           </p>
           {errors.date && (
             <p className="text-red-500 text-sm mt-1">{errors.date.message}</p>

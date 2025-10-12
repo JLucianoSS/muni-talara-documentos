@@ -2,7 +2,7 @@
 
 import { db } from '@/db';
 import { expedientes, areas, users, documents } from '@/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { eq, sql, desc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getPeruDateTime } from '@/lib/dateUtils';
 
@@ -13,8 +13,10 @@ type ExpedienteInput = {
   areaId: number;
 };
 
-export async function getExpedientes() {
-  return await db
+export async function getExpedientes(page: number = 1, limit: number = 10) {
+  const offset = (page - 1) * limit;
+  
+  const results = await db
     .select({
       id: expedientes.id,
       number: expedientes.number,
@@ -26,7 +28,27 @@ export async function getExpedientes() {
     })
     .from(expedientes)
     .leftJoin(users, eq(expedientes.responsibleUserId, users.id))
-    .leftJoin(areas, eq(expedientes.areaId, areas.id));
+    .leftJoin(areas, eq(expedientes.areaId, areas.id))
+    .orderBy(desc(expedientes.id))
+    .limit(limit)
+    .offset(offset);
+
+  // Contar total para paginación
+  const totalResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(expedientes);
+  
+  const total = totalResult[0]?.count || 0;
+
+  return {
+    data: results,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
 }
 
 export async function getAreas() {

@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getExpedientes, createExpediente, updateExpediente, deleteExpediente, hasDocumentsInExpediente } from '@/actions/expedientesActions';
 
-export async function GET() {
-  const data = await getExpedientes();
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const page = Number(searchParams.get('page')) || 1;
+  const limit = Number(searchParams.get('limit')) || 10;
+  
+  const data = await getExpedientes(page, limit);
   return NextResponse.json(data);
 }
 
@@ -11,9 +15,11 @@ export async function POST(request: Request) {
   const { action } = body;
   
   if (action === 'getExpedientesWithDocuments') {
-    const expedientes = await getExpedientes();
+    const page = body.page || 1;
+    const limit = body.limit || 10;
+    const expedientesData = await getExpedientes(page, limit);
     const expedientesWithInfo = await Promise.all(
-      expedientes.map(async (expediente) => {
+      expedientesData.data.map(async (expediente) => {
         const hasDocuments = await hasDocumentsInExpediente(expediente.id);
         return {
           ...expediente,
@@ -21,7 +27,10 @@ export async function POST(request: Request) {
         };
       })
     );
-    return NextResponse.json(expedientesWithInfo);
+    return NextResponse.json({
+      data: expedientesWithInfo,
+      pagination: expedientesData.pagination
+    });
   }
   
   await createExpediente(body);

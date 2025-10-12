@@ -1,16 +1,24 @@
 import { NextResponse } from 'next/server';
-import { getDocuments, createDocument, updateDocument, deleteDocument, getDocumentsByExpediente } from '@/actions/documentsActions';
+import { getDocuments, createDocument, updateDocument, deleteDocument, getDocumentsByExpediente, getDeletedDocuments } from '@/actions/documentsActions';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const expedienteId = searchParams.get('expedienteId');
+  const deleted = searchParams.get('deleted');
+  const page = Number(searchParams.get('page')) || 1;
+  const limit = Number(searchParams.get('limit')) || 10;
   
   if (expedienteId) {
     const data = await getDocumentsByExpediente(Number(expedienteId));
     return NextResponse.json(data);
   }
   
-  const data = await getDocuments();
+  if (deleted === 'true') {
+    const data = await getDeletedDocuments(page, limit);
+    return NextResponse.json(data);
+  }
+  
+  const data = await getDocuments(page, limit);
   return NextResponse.json(data);
 }
 
